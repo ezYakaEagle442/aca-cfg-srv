@@ -7,19 +7,6 @@
 # https://github.com/Azure/Azure-Spring-Cloud/issues/9
 # https://github.com/MicrosoftDocs/azure-docs/issues/91311
 
-# spring:
-#  cloud:
-#    azure:
-#      profile:
-#        tenant-id: ${AZURE_TENANT_ID}
-#      credential:
-#        client-id: ${AZURE_CLIENT_ID}
-#        client-secret: ${AZURE_CLIENT_SECRET}
-#      keyvault:
-#        secret:
-#          property-source-enabled: true
-#          endpoint: ${AZURE_KEYVAULT_ENDPOINT}
-
 server:
   # start services on random port by default
   port: 0
@@ -61,7 +48,39 @@ management.endpoints.web.exposure.include: "*"
 # Waiting issue https://github.com/spring-projects/spring-boot/issues/13042
 spring.cloud.refresh.refreshable: false
 
-
+---
+spring:
+  cloud:
+    azure:
+      keyvault:
+        secret:
+          property-sources:
+            - credential:
+                client-id: ${AZURE_CLIENT_ID}
+                client-secret: ${AZURE_CLIENT_SECRET}
+              endpoint: ${ENDPOINT}
+              profile:
+                tenant-id: ${AZURE_TENANT_ID}
+---
+spring:
+  config:
+    activate:
+      on-profile: mysql
+  datasource:
+    schema: classpath*:db/mysql/schema.sql
+    data: classpath*:db/mysql/data.sql
+    # url: jdbc:mysql://localhost:3306/petclinic?useSSL=false
+    # url: jdbc:mysql://petcliaca-mysql-server.mysql.database.azure.com:3306/petclinic?useSSL=true
+    # https://dev.mysql.com/doc/connector-j/5.1/en/connector-j-reference-using-ssl.html
+    # url: jdbc:mysql://petcliaca-mysql-server.mysql.database.azure.com:3306/petclinic?useSSL=true&requireSSL=true&enabledTLSProtocols=TLSv1.2&verifyServerCertificate=true
+    url: jdbc:mysql://${MYSQL-SERVER-FULL-NAME}:3306/${MYSQL-DATABASE-NAME}?useSSL=true&requireSSL=true&enabledTLSProtocols=TLSv1.2&verifyServerCertificate=true    
+    username: ${MYSQL-SERVER-ADMIN-LOGIN-NAME} # ${MYSQL_SERVER_ADMIN_LOGIN_NAME}
+    password: ${MYSQL-SERVER-ADMIN-PASSWORD} # ${MYSQL_SERVER_ADMIN_PASSWORD}
+    initialization-mode: NEVER # ALWAYS
+    # https://javabydeveloper.com/spring-boot-loading-initial-data/
+    platform: mysql
+    #driver-class-name: com.mysql.jdbc.Driver
+---
 # Logging
 logging.level.org.springframework: INFO
 logging.level.org.springframework.web: debug
@@ -89,7 +108,7 @@ logging.level.org.springframework.context.ApplicationContextInitializer: debug
 logging.level.org.springframework.boot.context.ConfigurationWarningsApplicationContextInitializer: debug
 logging.level.org.springframework.boot.context.ContextIdApplicationContextInitializer: debug
 
-
+---
 # Metrics: 
 # https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#actuator.metrics
 # https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#actuator.endpoints.exposing
@@ -134,4 +153,12 @@ chaos:
       rest-controller: false
       service: false
 
+---
+#spring:
+#  profiles: key-vault
+#
+#  MYSQL_SERVER_FULL_NAME: ${MYSQL-SERVER-FULL-NAME}
+#  MYSQL_DATABASE_NAME: ${MYSQL-DATABASE-NAME}
+#  MYSQL_SERVER_ADMIN_LOGIN_NAME: ${MYSQL-SERVER-ADMIN-LOGIN-NAME}
+#  MYSQL_SERVER_ADMIN_PASSWORD: ${MYSQL-SERVER-ADMIN-PASSWORD}
 --- 
