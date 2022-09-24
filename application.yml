@@ -2,8 +2,9 @@
 # 
 
 # https://github.com/Azure/azure-sdk-for-java/issues/28128
-# See Azure KeyVault config doc  https://microsoft.github.io/spring-cloud-azure/4.0.0/reference/html/index.html#basic-usage-3
-# Azure Spring Cloud managed Config-Server does not yet support Azure Key Vault
+# See Azure KeyVault config doc  https://microsoft.github.io/spring-cloud-azure/current/reference/html/index.html#basic-usage-3
+# https://github.com/Azure/azure-sdk-for-java/issues/28310
+# Azure Spring Apps managed Config-Server does not yet support Azure Key Vault
 # https://github.com/Azure/Azure-Spring-Cloud/issues/9
 # https://github.com/MicrosoftDocs/azure-docs/issues/91311
 
@@ -59,6 +60,7 @@ spring:
         managed-identity-enabled: true        
       keyvault:
         secret:
+          enabled: true
           property-sources:
             - name: kv-property-source-endpoint
               endpoint: ${AZURE_KEY_VAULT_ENDPOINT}
@@ -79,10 +81,14 @@ spring:
     # url: jdbc:mysql://localhost:3306/petclinic?useSSL=false
     # url: jdbc:mysql://petcliaca-mysql-server.mysql.database.azure.com:3306/petclinic?useSSL=true
     # https://dev.mysql.com/doc/connector-j/5.1/en/connector-j-reference-using-ssl.html
-    # url: jdbc:mysql://petcliaca-mysql-server.mysql.database.azure.com:3306/petclinic?useSSL=true&requireSSL=true&enabledTLSProtocols=TLSv1.2&verifyServerCertificate=true
-    url: jdbc:mysql://${MYSQL-SERVER-FULL-NAME}:3306/${MYSQL-DATABASE-NAME}?useSSL=true&requireSSL=true&enabledTLSProtocols=TLSv1.2&verifyServerCertificate=true    
-    username: ${MYSQL-SERVER-ADMIN-LOGIN-NAME} # ${MYSQL_SERVER_ADMIN_LOGIN_NAME}
-    password: ${MYSQL-SERVER-ADMIN-PASSWORD} # ${MYSQL_SERVER_ADMIN_PASSWORD}
+    # url: jdbc:mysql://petclinic.mysql.database.azure.com:3306/petclinic?useSSL=true&requireSSL=true&enabledTLSProtocols=TLSv1.2&verifyServerCertificate=true
+    
+    # https://docs.spring.io/spring-boot/docs/2.7.3/reference/html/application-properties.html#appendix.application-properties.data
+    # spring.datasource.url, spring.datasource.username and spring.datasource.password will be automatically injected from KV secrets SPRING-DATASOURCE-URL, SPRING-DATASOURCE-USERNAME and SPRING-DATASOURCE-PASSWORD
+    # url: jdbc:mysql://${MYSQL-SERVER-FULL-NAME}:3306/${MYSQL-DATABASE-NAME}?useSSL=true&requireSSL=true&enabledTLSProtocols=TLSv1.2&verifyServerCertificate=true    
+    # username: ${MYSQL-SERVER-ADMIN-LOGIN-NAME} # ${MYSQL_SERVER_ADMIN_LOGIN_NAME}
+    # password: ${MYSQL-SERVER-ADMIN-PASSWORD} # ${MYSQL_SERVER_ADMIN_PASSWORD}
+    
     initialization-mode: ALWAYS # NEVER
     # https://javabydeveloper.com/spring-boot-loading-initial-data/
     platform: mysql
@@ -159,13 +165,3 @@ chaos:
       repository: false
       rest-controller: false
       service: false
-
----
-#spring:
-#  profiles: key-vault
-#
-#  MYSQL_SERVER_FULL_NAME: ${MYSQL-SERVER-FULL-NAME}
-#  MYSQL_DATABASE_NAME: ${MYSQL-DATABASE-NAME}
-#  MYSQL_SERVER_ADMIN_LOGIN_NAME: ${MYSQL-SERVER-ADMIN-LOGIN-NAME}
-#  MYSQL_SERVER_ADMIN_PASSWORD: ${MYSQL-SERVER-ADMIN-PASSWORD}
---- 
