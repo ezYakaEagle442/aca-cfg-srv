@@ -52,15 +52,21 @@ spring.cloud.refresh.refreshable: false
 spring:
   cloud:
     azure:
+      profile: # spring.cloud.azure.profile
+        subscription-id:
+        tenant-id: ${AZURE_TENANT_ID}
+      credential:
+        managed-identity-enabled: true        
       keyvault:
         secret:
           property-sources:
-            - credential:
-                client-id: ${AZURE_CLIENT_ID}
-                client-secret: ${AZURE_CLIENT_SECRET}
-              endpoint: ${AZURE_KEY_VAULT_ENDPOINT} 
-              profile:
-                tenant-id: ${AZURE_TENANT_ID}
+            - endpoint: ${AZURE_KEY_VAULT_ENDPOINT}
+              credential.managed-identity-enabled: true # https://microsoft.github.io/spring-cloud-azure/current/reference/html/index.html#configuration-17
+              # credential:
+              #  client-id: ${AZURE_CLIENT_ID}
+              #  client-secret: ${AZURE_CLIENT_SECRET}
+              # profile:
+              #  tenant-id: ${AZURE_TENANT_ID}
 ---
 spring:
   config:
