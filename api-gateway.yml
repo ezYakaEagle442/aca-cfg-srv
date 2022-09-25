@@ -1,11 +1,14 @@
-zuul:
-  prefix: /api
-  ignoredServices: '*'
-  routes:
-    vets-service: /vet/**
-    visits-service: /visit/**
-    customers-service: /customer/**
-    api-gateway: /gateway/**
+# The Spring Zuul(Netflix Intelligent Routing) config has been deprecated and replaced by the Spring Cloud Gateway.
+# The Spring Cloud Gateway routing is configured at spring-petclinic-api-gateway\src\main\resources\application.yml
+# see also https://docs.spring.io/spring-cloud-gateway/docs/current/reference/html/#the-path-route-predicate-factory
+#zuul:
+#  prefix: /api
+#  ignoredServices: '*'
+#  routes:
+#    vets-service: /vet/**
+#    visits-service: /visit/**
+#    customers-service: /customer/**
+#    api-gateway: /gateway/**
 
 server:
   port: 8080
