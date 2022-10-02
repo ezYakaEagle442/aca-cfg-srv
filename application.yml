@@ -1,6 +1,10 @@
 # COMMON APPLICATION PROPERTIES
 # 
 
+# https://learn.microsoft.com/en-us/training/modules/secure-application-secrets-use-key-vault/6-update-application-configure
+# https://techcommunity.microsoft.com/t5/apps-on-azure-blog/delete-passwords-passwordless-connections-for-java-apps-to-azure/ba-p/3638714
+# https://learn.microsoft.com/en-us/training/modules/secure-application-secrets-use-key-vault/6-update-application-configure
+
 # https://github.com/Azure/azure-sdk-for-java/issues/28128
 # See Azure KeyVault config doc  https://microsoft.github.io/spring-cloud-azure/current/reference/html/index.html#basic-usage-3
 # https://github.com/Azure/azure-sdk-for-java/issues/28310
@@ -95,10 +99,16 @@ spring:
     #driver-class-name: com.mysql.jdbc.Driver
 ---
 # Logging
+logging.level.com.azure.spring.cloud.starter.keyvault.secrets: debug
+logging.level.org.springframework.samples.petclinic: debug
+
 logging.level.org.springframework: INFO
 logging.level.org.springframework.web: debug
 logging.level.org.hibernate: debug
 logging.level.com.mysql: debug
+logging.level.org.springframework.data.jpa: debug
+logging.level.org.springframework.web: debug
+logging.level.javax.persistence: INFO
 logging.level.org.springframework.jdbc.datasource: debug
 logging.level.org.springframework.boot.sql.init: debug
 logging.level.org.springframework.boot.autoconfigure.jdbc: debug
