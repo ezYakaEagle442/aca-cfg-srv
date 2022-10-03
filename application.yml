@@ -59,7 +59,7 @@ spring:
     azure:
       profile: # spring.cloud.azure.profile
         # subscription-id:
-        tenant-id: ${AZURE_TENANT_ID}
+        # tenant-id: ${AZURE_TENANT_ID}
       credential:
         managed-identity-enabled: true        
       keyvault:
@@ -67,7 +67,7 @@ spring:
           enabled: true
           property-sources:
             - name: kv-property-source-endpoint
-              endpoint: ${AZURE_KEY_VAULT_ENDPOINT}
+              endpoint: https://kv-petcliaca442.vault.azure.net/ # ${AZURE_KEY_VAULT_ENDPOINT}
               credential.managed-identity-enabled: true # https://microsoft.github.io/spring-cloud-azure/current/reference/html/index.html#configuration-17
               # credential:
               #  client-id: ${AZURE_CLIENT_ID}
